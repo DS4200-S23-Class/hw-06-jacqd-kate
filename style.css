@@ -1,0 +1,13 @@
+.center {
+	text-align: center;
+}
+
+.container {
+	display: flex;
+	flex-direction: row;
+	align-items: left;
+}
+
+.col {
+	flex: 33%;
+}
