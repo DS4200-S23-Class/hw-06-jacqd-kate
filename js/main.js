@@ -102,7 +102,7 @@ d3.csv("data/iris.csv").then((data) => {
         .text("Sepal_Width vs. Petal_Width");
 
 	// scatter plot 
-	SCATTER2.selectAll("points")
+	let points = SCATTER2.selectAll("points")
 			.data(data)
 			.enter()
 			.append("circle")
@@ -186,18 +186,23 @@ d3.csv("data/iris.csv").then((data) => {
 				.call(d3.axisLeft(Y_SCALE).ticks(10))
 					.attr("font-size", "10px");
 
+	SCATTER2.call( d3.brush()
+				.extent( [ [MARGINS.left, MARGINS.top], 
+						   [VIS_WIDTH + MARGINS.left, VIS_HEIGHT + MARGINS.top]])
+		.on("start brush", updateChart));
 
+	function updateChart({selection}) {
+    	const extent = selection;
+    	points.classed("selected", function(d){return brushed(extent, SCALE_WIDTH_X(d.Sepal_Width), 
+    															SCALE_WIDTH_Y(d.Petal_Width))});
+    }
 
-	SCATTER2.call(d3.brush()
-		.extent(
-			[[MARGINS.left, MARGINS.top], 
-			[VIS_WIDTH + MARGINS.right, VIS_HEIGHT + MARGINS.bottom]]))
-	.on("brush end", brushed)
-
-	brushed(event) {
-		
-
-
+	function brushed(coords, cx, cy) {
+		let x0 = coords[0][0],
+        	x1 = coords[1][0],
+        	y0 = coords[0][1],
+        	y1 = coords[1][1];
+    	return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
 
 	} 
 

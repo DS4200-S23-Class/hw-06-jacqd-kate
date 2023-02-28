@@ -17,3 +17,8 @@
   font-size: 16px;
   text-anchor: middle;
 }
+
+.selected {
+	opacity: 1 !important;
+	stroke: orange;
+}
