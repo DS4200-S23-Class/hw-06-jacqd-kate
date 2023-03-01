@@ -53,7 +53,7 @@ d3.csv("data/iris.csv").then((data) => {
         .text("Sepal_Length vs. Petal_Length");
 
 	// scatter plot 
-	SCATTER1.selectAll("points")
+	let s1 = SCATTER1.selectAll("points")
 			.data(data)
 			.enter()
 			.append("circle")
@@ -102,7 +102,7 @@ d3.csv("data/iris.csv").then((data) => {
         .text("Sepal_Width vs. Petal_Width");
 
 	// scatter plot 
-	let points = SCATTER2.selectAll("points")
+	let s2 = SCATTER2.selectAll("points")
 			.data(data)
 			.enter()
 			.append("circle")
@@ -130,22 +130,16 @@ d3.csv("data/iris.csv").then((data) => {
 					.attr("font-size", "10px");
 
 	// bar chart -> plot 3
-	const BAR3 =
-	d3.select("#vis3")
-	.append("svg")
-		.attr("width", FRAME_WIDTH)
-		.attr("height", FRAME_HEIGHT)
-		.attr("class", "frame");
-
-
-
+	const BAR3 = d3.select("#vis3")
+		.append("svg")
+			.attr("width", FRAME_WIDTH)
+			.attr("height", FRAME_HEIGHT)
+			.attr("class", "frame");
 
 	const MAX_Y = 50;
 	const X_SCALE = d3.scaleBand()
 						.domain(data.map((d) => {return d.Species}))
     					.range([0, VIS_WIDTH]);
-    					
-
 	const Y_SCALE = d3.scaleLinear()
 						.domain([0, MAX_Y + 1])
 						.range([VIS_HEIGHT, 0]);
@@ -161,7 +155,7 @@ d3.csv("data/iris.csv").then((data) => {
 
 
     // bar chart
-	BAR3.selectAll("bars")
+	b1 = BAR3.selectAll("bars")
 			.data(data)
 			.enter()
 			.append("rect")
@@ -186,25 +180,28 @@ d3.csv("data/iris.csv").then((data) => {
 				.call(d3.axisLeft(Y_SCALE).ticks(10))
 					.attr("font-size", "10px");
 
-	SCATTER2.call( d3.brush()
-				.extent( [ [MARGINS.left, MARGINS.top], 
+	// brushing and linking 
+	SCATTER2.call(d3.brush()
+				.extent([[MARGINS.left, MARGINS.top], 
 						   [VIS_WIDTH + MARGINS.left, VIS_HEIGHT + MARGINS.top]])
 		.on("start brush", updateChart));
 
-	function updateChart({selection}) {
-    	const extent = selection;
-    	points.classed("selected", function(d){return brushed(extent, SCALE_WIDTH_X(d.Sepal_Width), 
-    															SCALE_WIDTH_Y(d.Petal_Width))});
+	function updateChart(event) {
+    	const extent = event.selection;
+    	s2.classed("selected", (d) => {return brushed(extent, 
+    									SCALE_WIDTH_X(d.Sepal_Width) + MARGINS.left, 
+    									SCALE_WIDTH_Y(d.Petal_Width) + MARGINS.top)});
     }
 
 	function brushed(coords, cx, cy) {
-		let x0 = coords[0][0],
+		const x0 = coords[0][0],
         	x1 = coords[1][0],
         	y0 = coords[0][1],
         	y1 = coords[1][1];
-    	return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
+    	return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1
+	};
 
-	} 
+
 
 
 });
