@@ -181,34 +181,43 @@ d3.csv("data/iris.csv").then((data) => {
 					.attr("font-size", "10px");
 
 	// brushing and linking 
-	SCATTER2.call(d3.brush()
+	SCATTER2.append("g").call(d3.brush()
 				.extent([[MARGINS.left, MARGINS.top], 
 						   [VIS_WIDTH + MARGINS.left, VIS_HEIGHT + MARGINS.top]])
 		.on("start brush", updateChart));
 
+	// when brushed
 	function updateChart(event) {
+		// get area brushed over
     	const extent = event.selection;
 
+    	// highlight and outline scatter 1 points if selected
     	s1.classed("selected", (d) => {return brushed(extent,
     									SCALE_WIDTH_X(d.Sepal_Width) + MARGINS.left, 
     									SCALE_WIDTH_Y(d.Petal_Width) + MARGINS.top)})
 
+    	// highlight and outline scatter 2 points if selected
     	s2.classed("selected", (d) => {return brushed(extent, 
     									SCALE_WIDTH_X(d.Sepal_Width) + MARGINS.left, 
     									SCALE_WIDTH_Y(d.Petal_Width) + MARGINS.top)})
 
-    	b1.classed("selected", (d) => {return brushed(extent, 
+    	// highlight and outline bars if selected
+    	b1.classed("selected_bar", (d) => {return brushed(extent, 
     									SCALE_WIDTH_X(d.Sepal_Width) + MARGINS.left, 
     									SCALE_WIDTH_Y(d.Petal_Width) + MARGINS.top)})
 
 
     };
 
+    // check if point was selected
 	function brushed(coords, cx, cy) {
+		// selected area
 		const x0 = coords[0][0],
         	x1 = coords[1][0],
         	y0 = coords[0][1],
         	y1 = coords[1][1];
+
+        // returns True point in area, False otherwise
     	return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1
 	};
 

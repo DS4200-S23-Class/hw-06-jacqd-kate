@@ -22,3 +22,8 @@
 	opacity: 1 !important;
 	stroke: orange;
 }
+
+.selected_bar {
+	stroke: orange;
+	stroke-width: 5px; 
+}
