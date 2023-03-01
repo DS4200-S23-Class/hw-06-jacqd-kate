@@ -188,10 +188,21 @@ d3.csv("data/iris.csv").then((data) => {
 
 	function updateChart(event) {
     	const extent = event.selection;
+
+    	s1.classed("selected", (d) => {return brushed(extent,
+    									SCALE_WIDTH_X(d.Sepal_Width) + MARGINS.left, 
+    									SCALE_WIDTH_Y(d.Petal_Width) + MARGINS.top)})
+
     	s2.classed("selected", (d) => {return brushed(extent, 
     									SCALE_WIDTH_X(d.Sepal_Width) + MARGINS.left, 
-    									SCALE_WIDTH_Y(d.Petal_Width) + MARGINS.top)});
-    }
+    									SCALE_WIDTH_Y(d.Petal_Width) + MARGINS.top)})
+
+    	b1.classed("selected", (d) => {return brushed(extent, 
+    									SCALE_WIDTH_X(d.Sepal_Width) + MARGINS.left, 
+    									SCALE_WIDTH_Y(d.Petal_Width) + MARGINS.top)})
+
+
+    };
 
 	function brushed(coords, cx, cy) {
 		const x0 = coords[0][0],
